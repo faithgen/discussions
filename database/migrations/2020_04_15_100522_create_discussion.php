@@ -14,8 +14,15 @@ class CreateDiscussion extends Migration
     public function up()
     {
         Schema::create('fg_discussions', function (Blueprint $table) {
-            $table->id();
+            $table->string('id')->index();
+            $table->string('ministry_id', 150)->index();
+            $table->string('url')->nullable();
+            $table->longText('discussion')->nullable();
+            $table->string('discussable_id', 150)->index();
+            $table->string('discussable_type');
             $table->timestamps();
+
+            $table->foreign('ministry_id')->references('id')->on('fg_ministries')->onDelete('cascade');
         });
     }
 

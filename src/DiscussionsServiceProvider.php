@@ -15,33 +15,18 @@ class DiscussionsServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerRoutes(__DIR__.'/../routes/discussions.php', __DIR__.'/../routes/source.php');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
         $this->setUpSourceFiles(function () {
+            $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('discussions.php'),
             ], 'faithgen-discussions-config');
+
+            $this->publishes([
+                __DIR__.'/../database/migrations' => database_path('migrations')
+            ], 'faithgen-discussions-migrations');
         });
-
-        if ($this->app->runningInConsole()) {
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/discussions'),
-            ], 'views');*/
-
-            // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/discussions'),
-            ], 'assets');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/discussions'),
-            ], 'lang');*/
-
-            // Registering package commands.
-            // $this->commands([]);
-        }
     }
 
     /**
