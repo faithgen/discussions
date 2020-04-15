@@ -55,7 +55,7 @@ class DiscussionController extends Controller
             ->ministryDiscussions()
             ->latest()
             ->approved()
-            ->with(['images', 'discussable'])
+            ->with(['discussable.image'])
             ->exclude(['discussion'])
             ->withCount('comments')
             ->search(['url'], $request->filter_text)
@@ -130,7 +130,7 @@ class DiscussionController extends Controller
 
         $discussion->load([
             'images',
-            'discussable',
+            'discussable.image',
         ]);
 
         DiscussionResource::withoutWrapping();
