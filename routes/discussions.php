@@ -6,5 +6,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('discussions')
     ->name('discussions')
     ->group(function () {
+        Route::get('', [DiscussionController::class, 'index'])->name('index');
         Route::post('', [DiscussionController::class, 'create'])->name('create');
     });

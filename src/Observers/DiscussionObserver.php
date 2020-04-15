@@ -22,7 +22,7 @@ class DiscussionObserver
     /**
      * Handle the discussion "created" event.
      *
-     * @param  \Faithgen\Discussions\Models\Discussion  $discussion
+     * @param  Discussion  $discussion
      *
      * @return void
      */
@@ -45,7 +45,7 @@ class DiscussionObserver
     /**
      * Handle the discussion "updated" event.
      *
-     * @param  \Faithgen\Discussions\Models\Discussion  $discussion
+     * @param  Discussion  $discussion
      *
      * @return void
      */
@@ -57,7 +57,7 @@ class DiscussionObserver
     /**
      * Handle the discussion "deleted" event.
      *
-     * @param  \Faithgen\Discussions\Models\Discussion  $discussion
+     * @param  Discussion  $discussion
      *
      * @return void
      */
