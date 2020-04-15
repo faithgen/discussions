@@ -2,6 +2,8 @@
 
 namespace Faithgen\Discussions;
 
+use Faithgen\Discussions\Models\Discussion;
+use Faithgen\Discussions\Observers\DiscussionObserver;
 use FaithGen\SDK\Traits\ConfigTrait;
 use Illuminate\Support\ServiceProvider;
 
@@ -31,6 +33,8 @@ class DiscussionsServiceProvider extends ServiceProvider
                 __DIR__.'/../storage' => storage_path('app/public'),
             ], 'faithgen-discussions-storage');
         });
+
+        Discussion::observe(DiscussionObserver::class);
     }
 
     /**
