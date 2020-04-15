@@ -63,7 +63,7 @@ class DiscussionController extends Controller
      */
     public function create(CreateRequest $request)
     {
-        if (! count($request->validated())) {
+        if (count($request->validated()) === 1) {
             abort(422, 'You can not send a blank discussion!');
         }
 

@@ -15,15 +15,18 @@ class CreateRequest extends FormRequest
      */
     private array $denominations = [
         'Free'        => [
+            'title'      => 'required|string',
             'discussion' => 'required|string',
         ],
         'Premium'     => [
+            'title'      => 'required|string',
             'discussion' => 'string',
             'url'        => 'url',
             'images'     => 'array|max:1',
             'images.*'   => 'base64image',
         ],
         'PremiumPlus' => [
+            'title'      => 'required|string',
             'discussion' => 'string',
             'url'        => 'url',
             'images'     => 'array|max:5',
