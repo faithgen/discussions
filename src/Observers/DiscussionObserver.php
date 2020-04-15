@@ -20,25 +20,13 @@ class DiscussionObserver
     ];
 
     /**
-     * Handle the discussion "created" event.
-     *
-     * @param  Discussion  $discussion
-     *
-     * @return void
-     */
-    public function created(Discussion $discussion)
-    {
-        $this->saveImages($discussion);
-    }
-
-    /**
      * Handle the discussion "updated" event.
      *
      * @param  Discussion  $discussion
      *
      * @return void
      */
-    public function updated(Discussion $discussion)
+    public function saved(Discussion $discussion)
     {
         $this->saveImages($discussion);
     }
