@@ -7,6 +7,7 @@ use Faithgen\Discussions\Http\Requests\CreateRequest;
 use Faithgen\Discussions\Http\Requests\DeleteImageRequest;
 use Faithgen\Discussions\Http\Requests\DeleteRequest;
 use Faithgen\Discussions\Http\Requests\UpdateRequest;
+use Faithgen\Discussions\Http\Resources\Discussion as DiscussionResource;
 use Faithgen\Discussions\Http\Resources\DiscussionList;
 use Faithgen\Discussions\Models\Discussion;
 use Faithgen\Discussions\Services\DiscussionService;
@@ -20,7 +21,6 @@ use Illuminate\Routing\Controller;
 use InnoFlash\LaraStart\Helper;
 use InnoFlash\LaraStart\Http\Requests\IndexRequest;
 use InnoFlash\LaraStart\Traits\APIResponses;
-use Faithgen\Discussions\Http\Resources\Discussion as DiscussionResource;
 
 class DiscussionController extends Controller
 {
