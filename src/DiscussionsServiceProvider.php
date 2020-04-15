@@ -26,6 +26,10 @@ class DiscussionsServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__.'/../database/migrations' => database_path('migrations'),
             ], 'faithgen-discussions-migrations');
+
+            $this->publishes([
+                __DIR__.'/../storage' => storage_path('app/public'),
+            ], 'faithgen-discussions-storage');
         });
     }
 
