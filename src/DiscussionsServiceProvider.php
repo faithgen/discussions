@@ -4,6 +4,7 @@ namespace Faithgen\Discussions;
 
 use Faithgen\Discussions\Models\Discussion;
 use Faithgen\Discussions\Observers\DiscussionObserver;
+use Faithgen\Discussions\Services\DiscussionService;
 use FaithGen\SDK\Traits\ConfigTrait;
 use Illuminate\Support\ServiceProvider;
 
@@ -44,6 +45,8 @@ class DiscussionsServiceProvider extends ServiceProvider
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'faithgen-discussions');
+
+        $this->app->singleton(DiscussionService::class);
 
         // Register the main class to use with the facade
         $this->app->singleton('discussions', function () {
