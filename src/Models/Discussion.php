@@ -7,6 +7,7 @@ use FaithGen\SDK\Traits\Relationships\Belongs\BelongsToMinistryTrait;
 use FaithGen\SDK\Traits\Relationships\Morphs\CommentableTrait;
 use FaithGen\SDK\Traits\Relationships\Morphs\ImageableTrait;
 use FaithGen\SDK\Traits\StorageTrait;
+use FaithGen\SDK\Traits\TitleTrait;
 
 class Discussion extends UuidModel
 {
@@ -14,6 +15,7 @@ class Discussion extends UuidModel
     use CommentableTrait;
     use ImageableTrait;
     use StorageTrait;
+    use TitleTrait;
 
     protected $table = 'fg_discussions';
 
