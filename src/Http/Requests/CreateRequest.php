@@ -3,33 +3,13 @@
 namespace Faithgen\Discussions\Http\Requests;
 
 use Faithgen\Discussions\Models\Discussion;
+use Faithgen\Discussions\Traits\SavesDiscussion;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Http\FormRequest;
 
 class CreateRequest extends FormRequest
 {
-    /**
-     * Request rules.
-     *
-     * @var array
-     */
-    private array $denominations = [
-        'Free'        => [
-            'discussion' => 'required|string',
-        ],
-        'Premium'     => [
-            'discussion' => 'string',
-            'url'        => 'url',
-            'images'     => 'array|max:1',
-            'images.*'   => 'base64image',
-        ],
-        'PremiumPlus' => [
-            'discussion' => 'string',
-            'url'        => 'url',
-            'images'     => 'array|max:5',
-            'images.*'   => 'base64image',
-        ],
-    ];
+    use SavesDiscussion;
 
     /**
      * Determine if the user is authorized to make this request.
@@ -50,7 +30,7 @@ class CreateRequest extends FormRequest
     {
         return array_merge([
             'title' => 'required|string',
-        ], $this->denominations[auth()->user()->account->level]);
+        ], $this->getSaveRules(auth()->user()->account->level));
     }
 
     public function failedAuthorization()
@@ -66,19 +46,5 @@ class CreateRequest extends FormRequest
         }
 
         throw new AuthorizationException($message);
-    }
-
-    /**
-     * Converts image string array to usable string in the validation.
-     *
-     * @return void
-     */
-    public function prepareForValidation()
-    {
-        if (is_string($this->images)) {
-            $this->merge([
-                'images' => json_decode($this->images, true),
-            ]);
-        }
     }
 }

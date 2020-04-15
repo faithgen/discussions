@@ -4,6 +4,7 @@ namespace Faithgen\Discussions\Http\Controllers;
 
 use Faithgen\Discussions\Http\Requests\CreateRequest;
 use Faithgen\Discussions\Http\Requests\DeleteRequest;
+use Faithgen\Discussions\Http\Requests\UpdateRequest;
 use Faithgen\Discussions\Http\Resources\DiscussionList;
 use Faithgen\Discussions\Models\Discussion;
 use Faithgen\Discussions\Services\DiscussionService;
@@ -51,7 +52,7 @@ class DiscussionController extends Controller
             ->exclude(['discussion'])
             ->search(['url'], $request->filter_text)
             ->orWhereHasMorph('discussable', $acceptableTypes,
-                fn ($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'))
+                fn($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'))
             ->paginate(Helper::getLimit($request));
 
         DiscussionList::wrap('discussions');
@@ -76,6 +77,14 @@ class DiscussionController extends Controller
             'Discussion created successfully!'.(auth('web')->user() ? ' Waiting for admin to approve.' : ''));
     }
 
+    /**
+     * Deletes the discussion.
+     *
+     * @param  Discussion  $discussion
+     * @param  DeleteRequest  $request
+     *
+     * @return mixed
+     */
     public function destroy(Discussion $discussion, DeleteRequest $request)
     {
         try {
@@ -85,5 +94,10 @@ class DiscussionController extends Controller
         } catch (\Exception $e) {
             abort(500, $e->getMessage());
         }
+    }
+
+    public function update(UpdateRequest $request)
+    {
+        return $request->all();
     }
 }

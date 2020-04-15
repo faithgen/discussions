@@ -46,6 +46,32 @@ class DiscussionPolicy
      */
     public function delete(Ministry $ministry, Discussion $discussion)
     {
+        return $this->canTransact($ministry, $discussion);
+    }
+
+    /**
+     * Decides whether or not to update this discussion.
+     *
+     * @param  Ministry  $ministry
+     * @param  Discussion  $discussion
+     *
+     * @return bool
+     */
+    public function update(Ministry $ministry, Discussion $discussion)
+    {
+        return $this->canTransact($ministry, $discussion);
+    }
+
+    /**
+     * Checks whether or not to transact on the given discussion.
+     *
+     * @param  Ministry  $ministry
+     * @param  Discussion  $discussion
+     *
+     * @return bool
+     */
+    private function canTransact(Ministry $ministry, Discussion $discussion)
+    {
         if ($user = auth('web')->user()) {
             return $ministry->id === $discussion->ministry_id
                 && auth('web')->user()->id === $discussion->discussable_id;
