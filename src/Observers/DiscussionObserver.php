@@ -36,10 +36,9 @@ class DiscussionObserver
             }
 
             UploadImages::withChain([
-                new ProcessImages(),
-                new S3Upload(),
-            ])
-                ->dispatch($discussion, $images);
+                new ProcessImages($discussion),
+                new S3Upload($discussion),
+            ])->dispatch($discussion, $images);
         }
     }
 
