@@ -14,17 +14,16 @@ class DiscussionsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        $this->registerRoutes(__DIR__.'/../routes/discussions.php', __DIR__.'/../routes/source.php');
         // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
 
-        $this->setUpSourceFiles(function (){
+        $this->setUpSourceFiles(function () {
             $this->publishes([
                 __DIR__.'/../config/config.php' => config_path('discussions.php'),
             ], 'faithgen-discussions-config');
         });
 
         if ($this->app->runningInConsole()) {
-
-
             // Publishing the views.
             /*$this->publishes([
                 __DIR__.'/../resources/views' => resource_path('views/vendor/discussions'),
