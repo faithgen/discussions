@@ -2,6 +2,7 @@
 
 namespace Faithgen\Discussions\Policies;
 
+use Faithgen\Discussions\Models\Discussion;
 use FaithGen\SDK\Models\Ministry;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -33,5 +34,23 @@ class DiscussionPolicy
         }
 
         return $canCreate;
+    }
+
+    /**
+     * Decides whether or not a discussion should be deleted.
+     *
+     * @param  Ministry  $ministry
+     * @param  Discussion  $discussion
+     *
+     * @return bool
+     */
+    public function delete(Ministry $ministry, Discussion $discussion)
+    {
+        if ($user = auth('web')->user()) {
+            return $ministry->id === $discussion->ministry_id
+                && auth('web')->user()->id === $discussion->discussable_id;
+        }
+
+        return $ministry->id === $discussion->ministry_id;
     }
 }
