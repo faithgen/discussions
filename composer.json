@@ -46,7 +46,8 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Faithgen\\Discussions\\DiscussionsServiceProvider"
+                "Faithgen\\Discussions\\DiscussionsServiceProvider",
+                "Faithgen\\Discussions\\Providers\\AuthServiceProvider"
             ],
             "aliases": {
                 "Discussions": "Faithgen\\Discussions\\DiscussionsFacade"
