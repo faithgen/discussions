@@ -30,7 +30,7 @@ class CreateRequest extends FormRequest
     {
         return array_merge([
             'title' => 'required|string',
-        ], $this->getSaveRules(auth()->user()->account->level));
+        ], $this->getSaveRules());
     }
 
     public function failedAuthorization()

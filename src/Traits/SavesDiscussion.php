@@ -23,11 +23,9 @@ trait SavesDiscussion
     /**
      * Get the update rules for the given ministry level.
      *
-     * @param  string  $level
-     *
      * @return array
      */
-    protected function getSaveRules(string $level): array
+    protected function getSaveRules(): array
     {
         if ($discussion = app(DiscussionService::class)->getDiscussion()) {
             $currentCount = $discussion->images()->count();
@@ -51,6 +49,6 @@ trait SavesDiscussion
                 'images'     => 'array|max:'.(5 - $currentCount),
                 'images.*'   => 'base64image',
             ],
-        ][$level];
+        ][auth()->user()->account->level];
     }
 }

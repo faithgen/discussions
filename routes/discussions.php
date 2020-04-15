@@ -9,4 +9,5 @@ Route::prefix('discussions')
         Route::get('', [DiscussionController::class, 'index'])->name('index');
         Route::delete('{discussion}', [DiscussionController::class, 'destroy'])->name('destroy');
         Route::post('', [DiscussionController::class, 'create'])->name('create');
+        Route::post('update', [DiscussionController::class, 'update'])->name('update');
     });

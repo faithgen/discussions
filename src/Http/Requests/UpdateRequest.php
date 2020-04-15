@@ -37,6 +37,6 @@ class UpdateRequest extends FormRequest
         return array_merge([
             'discussion_id' => Helper::$idValidation,
             'title'         => 'required|string',
-        ], $this->getSaveRules(auth()->user()->account->level));
+        ], $this->getSaveRules());
     }
 }

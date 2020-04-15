@@ -52,7 +52,7 @@ class DiscussionController extends Controller
             ->exclude(['discussion'])
             ->search(['url'], $request->filter_text)
             ->orWhereHasMorph('discussable', $acceptableTypes,
-                fn($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'))
+                fn ($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'))
             ->paginate(Helper::getLimit($request));
 
         DiscussionList::wrap('discussions');
@@ -96,8 +96,15 @@ class DiscussionController extends Controller
         }
     }
 
+    /**
+     * Updates the discussion.
+     *
+     * @param  UpdateRequest  $request
+     *
+     * @return \Illuminate\Http\JsonResponse|mixed
+     */
     public function update(UpdateRequest $request)
     {
-        return $request->all();
+        return $this->discussionService->update($request->validated(), 'Discussion updated successfully!');
     }
 }

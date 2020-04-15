@@ -28,18 +28,7 @@ class DiscussionObserver
      */
     public function created(Discussion $discussion)
     {
-        if ($this->levels[auth()->user()->account->level] && request()->has('images')) {
-            if (is_string(request('images'))) {
-                $images = json_decode(request('images'), true);
-            } else {
-                $images = request('images');
-            }
-
-            UploadImages::withChain([
-                new ProcessImages($discussion),
-                new S3Upload($discussion),
-            ])->dispatch($discussion, $images);
-        }
+        $this->saveImages($discussion);
     }
 
     /**
@@ -51,7 +40,7 @@ class DiscussionObserver
      */
     public function updated(Discussion $discussion)
     {
-        //
+        $this->saveImages($discussion);
     }
 
     /**
@@ -82,6 +71,27 @@ class DiscussionObserver
             $discussion->discussable_type = get_class(auth()->user());
             $discussion->discussable_id = auth()->user()->id;
             $discussion->approved = true;
+        }
+    }
+
+    /**
+     * Saves the images if user ministry is allowed to.
+     *
+     * @param  Discussion  $discussion
+     */
+    private function saveImages(Discussion $discussion)
+    {
+        if ($this->levels[auth()->user()->account->level] && request()->has('images')) {
+            if (is_string(request('images'))) {
+                $images = json_decode(request('images'), true);
+            } else {
+                $images = request('images');
+            }
+
+            UploadImages::withChain([
+                new ProcessImages($discussion),
+                new S3Upload($discussion),
+            ])->dispatch($discussion, $images);
         }
     }
 }
