@@ -37,6 +37,19 @@ class DiscussionPolicy
     }
 
     /**
+     * Authorizes viewing this discussion.
+     *
+     * @param  Ministry  $ministry
+     * @param  Discussion  $discussion
+     *
+     * @return bool
+     */
+    public function view(Ministry $ministry, Discussion $discussion)
+    {
+        return $ministry->id === $discussion->ministry_id;
+    }
+
+    /**
      * Decides whether or not a discussion should be deleted.
      *
      * @param  Ministry  $ministry

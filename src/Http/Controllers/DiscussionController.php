@@ -10,14 +10,18 @@ use Faithgen\Discussions\Models\Discussion;
 use Faithgen\Discussions\Services\DiscussionService;
 use FaithGen\SDK\Models\Ministry;
 use FaithGen\SDK\Models\User;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Routing\Controller;
 use InnoFlash\LaraStart\Helper;
 use InnoFlash\LaraStart\Http\Requests\IndexRequest;
 use InnoFlash\LaraStart\Traits\APIResponses;
+use Faithgen\Discussions\Http\Resources\Discussion as DiscussionResource;
 
 class DiscussionController extends Controller
 {
     use APIResponses;
+    use AuthorizesRequests;
+
     /**
      * @var DiscussionService
      */
@@ -50,6 +54,7 @@ class DiscussionController extends Controller
             ->approved()
             ->with(['images', 'discussable'])
             ->exclude(['discussion'])
+            ->withCount('comments')
             ->search(['url'], $request->filter_text)
             ->orWhereHasMorph('discussable', $acceptableTypes,
                 fn ($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'))
@@ -106,5 +111,22 @@ class DiscussionController extends Controller
     public function update(UpdateRequest $request)
     {
         return $this->discussionService->update($request->validated(), 'Discussion updated successfully!');
+    }
+
+    /**
+     * Shows the discussion in detail.
+     *
+     * @param  Discussion  $discussion
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return DiscussionResource
+     */
+    public function show(Discussion $discussion)
+    {
+        $this->authorize('view', $discussion);
+
+        DiscussionResource::withoutWrapping();
+
+        return new DiscussionResource($discussion);
     }
 }

@@ -29,6 +29,9 @@ class DiscussionList extends JsonResource
             'id'       => $this->id,
             'title'    => $this->title,
             'approved' => (bool) $this->approved,
+            'comments' => [
+                'count' => $this->comments_count,
+            ],
             'creator'  => [
                 'id'       => $this->discussable_id,
                 'name'     => $this->discussable->name,
