@@ -125,6 +125,11 @@ class DiscussionController extends Controller
     {
         $this->authorize('view', $discussion);
 
+        $discussion->load([
+            'images',
+            'discussable',
+        ]);
+
         DiscussionResource::withoutWrapping();
 
         return new DiscussionResource($discussion);
