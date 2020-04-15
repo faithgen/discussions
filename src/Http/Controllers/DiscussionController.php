@@ -4,12 +4,14 @@ namespace Faithgen\Discussions\Http\Controllers;
 
 use Faithgen\Discussions\Http\Requests\CommentRequest;
 use Faithgen\Discussions\Http\Requests\CreateRequest;
+use Faithgen\Discussions\Http\Requests\DeleteImageRequest;
 use Faithgen\Discussions\Http\Requests\DeleteRequest;
 use Faithgen\Discussions\Http\Requests\UpdateRequest;
 use Faithgen\Discussions\Http\Resources\DiscussionList;
 use Faithgen\Discussions\Models\Discussion;
 use Faithgen\Discussions\Services\DiscussionService;
 use FaithGen\SDK\Helpers\CommentHelper;
+use FaithGen\SDK\Models\Image;
 use FaithGen\SDK\Models\Ministry;
 use FaithGen\SDK\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -164,5 +166,29 @@ class DiscussionController extends Controller
     public function comment(CommentRequest $request)
     {
         return CommentHelper::createComment($this->discussionService->getDiscussion(), $request);
+    }
+
+    /**
+     * Deletes an image from a discussion.
+     *
+     * @param  DeleteImageRequest  $request
+     * @param  Discussion  $discussion
+     * @param  Image  $image
+     *
+     * @throws \Exception
+     * @return mixed
+     */
+    public function deleteImage(DeleteImageRequest $request, Discussion $discussion, Image $image)
+    {
+        try {
+            unlink(storage_path('app/public/discussions/100-100/'.$image->name));
+            unlink(storage_path('app/public/discussions/original/'.$image->name));
+
+            return $this->successResponse('Image deleted!');
+        } catch (\Exception $e) {
+            abort(500, $e->getMessage());
+        } finally {
+            $image->delete();
+        }
     }
 }

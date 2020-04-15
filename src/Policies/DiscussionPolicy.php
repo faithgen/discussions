@@ -3,6 +3,7 @@
 namespace Faithgen\Discussions\Policies;
 
 use Faithgen\Discussions\Models\Discussion;
+use FaithGen\SDK\Models\Image;
 use FaithGen\SDK\Models\Ministry;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -73,6 +74,30 @@ class DiscussionPolicy
     public function update(Ministry $ministry, Discussion $discussion)
     {
         return $this->canTransact($ministry, $discussion);
+    }
+
+    /**
+     * Whether or not to delete an image away from a discussion.
+     *
+     * @param  Ministry  $ministry
+     * @param  Discussion  $discussion
+     * @param  Image  $image
+     *
+     * @return bool
+     */
+    public function deleteImage(Ministry $ministry, Discussion $discussion)
+    {
+        $image = request()->route('image');
+
+        if ($user = auth('web')->user()) {
+            return $ministry->id === $discussion->ministry_id
+                && $image->imageable_id === $discussion->id
+                && $discussion->discussable_id === $user->id;
+        }
+
+        return $ministry->id === $discussion->ministry_id
+            && $image->imageable_id === $discussion->id
+            && $discussion->discussable_id === $ministry->id;
     }
 
     /**
