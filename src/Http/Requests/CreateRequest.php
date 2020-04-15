@@ -15,18 +15,15 @@ class CreateRequest extends FormRequest
      */
     private array $denominations = [
         'Free'        => [
-            'title'      => 'required|string',
             'discussion' => 'required|string',
         ],
         'Premium'     => [
-            'title'      => 'required|string',
             'discussion' => 'string',
             'url'        => 'url',
             'images'     => 'array|max:1',
             'images.*'   => 'base64image',
         ],
         'PremiumPlus' => [
-            'title'      => 'required|string',
             'discussion' => 'string',
             'url'        => 'url',
             'images'     => 'array|max:5',
@@ -51,7 +48,9 @@ class CreateRequest extends FormRequest
      */
     public function rules()
     {
-        return $this->denominations[auth()->user()->account->level];
+        return array_merge([
+            'title' => 'required|string',
+        ], $this->denominations[auth()->user()->account->level]);
     }
 
     public function failedAuthorization()
