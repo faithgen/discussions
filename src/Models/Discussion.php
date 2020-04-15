@@ -14,4 +14,14 @@ class Discussion extends UuidModel
     use ImageableTrait;
 
     protected $table = 'fg_discussions';
+
+    /**
+     * Relates this discussion to models using it.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\MorphTo
+     */
+    public function discussable()
+    {
+        return $this->morphTo();
+    }
 }
