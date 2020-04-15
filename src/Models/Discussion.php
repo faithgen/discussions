@@ -6,12 +6,14 @@ use FaithGen\SDK\Models\UuidModel;
 use FaithGen\SDK\Traits\Relationships\Belongs\BelongsToMinistryTrait;
 use FaithGen\SDK\Traits\Relationships\Morphs\CommentableTrait;
 use FaithGen\SDK\Traits\Relationships\Morphs\ImageableTrait;
+use FaithGen\SDK\Traits\StorageTrait;
 
 class Discussion extends UuidModel
 {
     use BelongsToMinistryTrait;
     use CommentableTrait;
     use ImageableTrait;
+    use StorageTrait;
 
     protected $table = 'fg_discussions';
 
@@ -23,5 +25,37 @@ class Discussion extends UuidModel
     public function discussable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * The directory name for the folder holding images.
+     *
+     * @return string
+     */
+    public function filesDir()
+    {
+        return 'discussions';
+    }
+
+    /**
+     * The name(s) of image(s).
+     *
+     * @return mixed
+     */
+    public function getFileName()
+    {
+        return $this->images()
+            ->pluck('name')
+            ->toArray();
+    }
+
+    /**
+     * The dimensions the discussion images has.
+     *
+     * @return array
+     */
+    public function getImageDimensions()
+    {
+        return [0, 100];
     }
 }
