@@ -8,9 +8,11 @@ use Faithgen\Discussions\Http\Requests\UpdateRequest;
 use Faithgen\Discussions\Http\Resources\DiscussionList;
 use Faithgen\Discussions\Models\Discussion;
 use Faithgen\Discussions\Services\DiscussionService;
+use FaithGen\SDK\Helpers\CommentHelper;
 use FaithGen\SDK\Models\Ministry;
 use FaithGen\SDK\Models\User;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use InnoFlash\LaraStart\Helper;
 use InnoFlash\LaraStart\Http\Requests\IndexRequest;
@@ -133,5 +135,21 @@ class DiscussionController extends Controller
         DiscussionResource::withoutWrapping();
 
         return new DiscussionResource($discussion);
+    }
+
+    /**
+     * Fetch discussion comments.
+     *
+     * @param  Request  $request
+     * @param  Discussion  $discussion
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function comments(Request $request, Discussion $discussion)
+    {
+        $this->authorize('view', $discussion);
+
+        return CommentHelper::getComments($discussion, $request);
     }
 }
