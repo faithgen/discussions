@@ -2,8 +2,6 @@
 
 namespace Faithgen\Discussions\Http\Resources;
 
-use FaithGen\Gallery\Http\Resources\Image;
-
 class Discussion extends DiscussionList
 {
     public function toArray($request)
