@@ -5,7 +5,6 @@ namespace Faithgen\Discussions\Observers;
 use Faithgen\Discussions\Models\Discussion;
 use FaithGen\SDK\Models\User;
 use FaithGen\SDK\Traits\FileTraits;
-use Illuminate\Support\Str;
 
 class DiscussionObserver
 {
@@ -49,10 +48,20 @@ class DiscussionObserver
         }
     }
 
+    /**
+     * Converts data when a discussion is being created.
+     *
+     * @param  Discussion  $discussion
+     */
     public function creating(Discussion $discussion)
     {
-        if (Str::of($discussion->discussable_type)->contains('User')) {
+        if ($user = auth('web')->user()) {
             $discussion->discussable_type = User::class;
+            $discussion->discussable_id = $user->id;
+        } else {
+            $discussion->discussable_type = get_class(auth()->user());
+            $discussion->discussable_id = auth()->user()->id;
+            $discussion->approved = true;
         }
     }
 }

@@ -34,7 +34,7 @@ class DiscussionService extends CRUDServices
      */
     public function getUnsetFields()
     {
-        return ['discussion_id'];
+        return ['discussion_id', 'images'];
     }
 
     /**

@@ -20,7 +20,8 @@
         "faithgen/sdk": "^2.0",
         "illuminate/support": "^6.0|^7.0",
         "illuminate/database": "^6.0|^7.0",
-        "illuminate/contracts": "^6.0|^7.0"
+        "illuminate/contracts": "^6.0|^7.0",
+        "crazybooot/base64-validation": "^1.0"
     },
     "require-dev": {
         "orchestra/testbench": "^4.0",
