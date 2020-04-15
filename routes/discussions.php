@@ -12,4 +12,5 @@ Route::prefix('discussions')
         Route::delete('{discussion}', [DiscussionController::class, 'destroy'])->name('destroy');
         Route::post('', [DiscussionController::class, 'create'])->name('create');
         Route::post('update', [DiscussionController::class, 'update'])->name('update');
+        Route::post('comment', [DiscussionController::class, 'comment'])->name('comment');
     });

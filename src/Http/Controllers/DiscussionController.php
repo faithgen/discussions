@@ -2,6 +2,7 @@
 
 namespace Faithgen\Discussions\Http\Controllers;
 
+use Faithgen\Discussions\Http\Requests\CommentRequest;
 use Faithgen\Discussions\Http\Requests\CreateRequest;
 use Faithgen\Discussions\Http\Requests\DeleteRequest;
 use Faithgen\Discussions\Http\Requests\UpdateRequest;
@@ -151,5 +152,17 @@ class DiscussionController extends Controller
         $this->authorize('view', $discussion);
 
         return CommentHelper::getComments($discussion, $request);
+    }
+
+    /**
+     * Creates a comment for a discussion.
+     *
+     * @param  CommentRequest  $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function comment(CommentRequest $request)
+    {
+        return CommentHelper::createComment($this->discussionService->getDiscussion(), $request);
     }
 }
