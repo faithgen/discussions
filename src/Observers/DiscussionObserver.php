@@ -3,7 +3,9 @@
 namespace Faithgen\Discussions\Observers;
 
 use Faithgen\Discussions\Models\Discussion;
+use FaithGen\SDK\Models\User;
 use FaithGen\SDK\Traits\FileTraits;
+use Illuminate\Support\Str;
 
 class DiscussionObserver
 {
@@ -44,6 +46,13 @@ class DiscussionObserver
     {
         if ($discussion->images) {
             $this->deleteFiles($discussion);
+        }
+    }
+
+    public function creating(Discussion $discussion)
+    {
+        if (Str::of($discussion->discussable_type)->contains('User')) {
+            $discussion->discussable_type = User::class;
         }
     }
 }
