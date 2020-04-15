@@ -2,6 +2,9 @@
 
 namespace Faithgen\Discussions\Observers;
 
+use Faithgen\Discussions\Jobs\ProcessImages;
+use Faithgen\Discussions\Jobs\S3Upload;
+use Faithgen\Discussions\Jobs\UploadImages;
 use Faithgen\Discussions\Models\Discussion;
 use FaithGen\SDK\Models\User;
 use FaithGen\SDK\Traits\FileTraits;
@@ -9,6 +12,12 @@ use FaithGen\SDK\Traits\FileTraits;
 class DiscussionObserver
 {
     use FileTraits;
+
+    private array $levels = [
+        'Free'        => false,
+        'Premium'     => true,
+        'PremiumPlus' => true,
+    ];
 
     /**
      * Handle the discussion "created" event.
@@ -19,7 +28,19 @@ class DiscussionObserver
      */
     public function created(Discussion $discussion)
     {
-        //
+        if ($this->levels[auth()->user()->account->level] && request()->has('images')) {
+            if (is_string(request('images'))) {
+                $images = json_decode(request('images'), true);
+            } else {
+                $images = request('images');
+            }
+
+            UploadImages::withChain([
+                new ProcessImages(),
+                new S3Upload(),
+            ])
+                ->dispatch($discussion, $images);
+        }
     }
 
     /**
