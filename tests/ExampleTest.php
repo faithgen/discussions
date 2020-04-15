@@ -2,8 +2,8 @@
 
 namespace Faithgen\Discussions\Tests;
 
-use Orchestra\Testbench\TestCase;
 use Faithgen\Discussions\DiscussionsServiceProvider;
+use Orchestra\Testbench\TestCase;
 
 class ExampleTest extends TestCase
 {

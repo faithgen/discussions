@@ -51,7 +51,7 @@ class DiscussionController extends Controller
             ->exclude(['discussion'])
             ->search(['url'], $request->filter_text)
             ->orWhereHasMorph('discussable', $acceptableTypes,
-                fn($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'))
+                fn ($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'))
             ->paginate(Helper::getLimit($request));
 
         DiscussionList::wrap('discussions');

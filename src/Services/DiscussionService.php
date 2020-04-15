@@ -3,7 +3,6 @@
 namespace Faithgen\Discussions\Services;
 
 use Faithgen\Discussions\Models\Discussion;
-use Illuminate\Database\Eloquent\Model as ParentModel;
 use InnoFlash\LaraStart\Services\CRUDServices;
 
 class DiscussionService extends CRUDServices
