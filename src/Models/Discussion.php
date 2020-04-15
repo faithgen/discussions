@@ -58,4 +58,20 @@ class Discussion extends UuidModel
     {
         return [0, 100];
     }
+
+    /**
+     * Returns only approved discussions if being called from the app API.
+     *
+     * @param $query
+     *
+     * @return mixed
+     */
+    public function scopeApproved($query)
+    {
+        if (auth('web')->user()) {
+            return $query->whereApproved(true);
+        }
+
+        return $query;
+    }
 }

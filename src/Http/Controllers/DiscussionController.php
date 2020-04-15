@@ -42,6 +42,7 @@ class DiscussionController extends Controller
         $discussions = auth()->user()
             ->ministryDiscussions()
             ->latest()
+            ->approved()
             ->with(['images', 'discussable'])
             ->exclude(['discussion'])
             ->search(['url'], $request->filter_text)
