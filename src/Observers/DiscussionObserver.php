@@ -3,9 +3,12 @@
 namespace Faithgen\Discussions\Observers;
 
 use Faithgen\Discussions\Models\Discussion;
+use FaithGen\SDK\Traits\FileTraits;
 
 class DiscussionObserver
 {
+    use FileTraits;
+
     /**
      * Handle the discussion "created" event.
      *
@@ -39,7 +42,8 @@ class DiscussionObserver
      */
     public function deleted(Discussion $discussion)
     {
-        //
+        if ($discussion->images) {
+            $this->deleteFiles($discussion);
+        }
     }
-
 }
