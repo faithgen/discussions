@@ -191,4 +191,22 @@ class DiscussionController extends Controller
             return $this->successResponse('Image deleted!');
         }
     }
+
+    /**
+     * Changes the discussion status.
+     *
+     * @param  Discussion  $discussion
+     *
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     * @return mixed
+     */
+    public function toggleStatus(Discussion $discussion)
+    {
+        $this->authorize('edit', $discussion);
+
+        $discussion->approved = ! $discussion->approved;
+        $discussion->save();
+
+        return $this->successResponse('Discussion state changed');
+    }
 }
