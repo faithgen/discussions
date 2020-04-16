@@ -183,12 +183,12 @@ class DiscussionController extends Controller
         try {
             unlink(storage_path('app/public/discussions/100-100/'.$image->name));
             unlink(storage_path('app/public/discussions/original/'.$image->name));
-
-            return $this->successResponse('Image deleted!');
         } catch (\Exception $e) {
-            abort(500, $e->getMessage());
+            //abort(500, $e->getMessage());
         } finally {
             $image->delete();
+
+            return $this->successResponse('Image deleted!');
         }
     }
 }
