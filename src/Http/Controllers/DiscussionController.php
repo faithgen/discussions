@@ -209,4 +209,28 @@ class DiscussionController extends Controller
 
         return $this->successResponse('Discussion state changed');
     }
+
+    /**
+     * Get the discussions raised by a user.
+     *
+     * @param  User  $user
+     * @param  IndexRequest  $request
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function userDiscussions(User $user, IndexRequest $request)
+    {
+        $discussions = $user->discussions()
+            ->latest()
+            ->with(['discussable.image'])
+            ->exclude(['discussion'])
+            ->withCount('comments')
+            ->search(['url'], $request->filter_text)
+            ->where('ministry_id', auth()->user()->id)
+            ->paginate(Helper::getLimit($request));
+
+        DiscussionList::wrap('discussions');
+
+        return DiscussionList::collection($discussions);
+    }
 }

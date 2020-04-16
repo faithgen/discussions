@@ -9,6 +9,7 @@ Route::prefix('discussions')
         Route::get('', [DiscussionController::class, 'index'])->name('index');
         Route::get('{discussion}', [DiscussionController::class, 'show'])->name('show');
         Route::get('comments/{discussion}', [DiscussionController::class, 'comments'])->name('comments');
+        Route::get('user/{user}', [DiscussionController::class, 'userDiscussions'])->name('userDiscussions');
         Route::delete('{discussion}', [DiscussionController::class, 'destroy'])->name('destroy');
         Route::delete('{discussion}/{image}', [DiscussionController::class, 'deleteImage'])->name('deleteImage');
         Route::post('', [DiscussionController::class, 'create'])->name('create');
