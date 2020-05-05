@@ -3,15 +3,21 @@
 namespace Faithgen\Discussions\Jobs;
 
 use Faithgen\Discussions\Models\Discussion;
+use FaithGen\SDK\Traits\SavesToAmazonS3;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class S3Upload implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        SavesToAmazonS3;
 
     public bool $deleteWhenMissingModels = true;
     /**
@@ -22,7 +28,7 @@ class S3Upload implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  Discussion  $discussion
+     * @param Discussion $discussion
      */
     public function __construct(Discussion $discussion)
     {
@@ -36,6 +42,10 @@ class S3Upload implements ShouldQueue
      */
     public function handle()
     {
-        //
+        try {
+            $this->saveFiles($this->discussion);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
     }
 }
