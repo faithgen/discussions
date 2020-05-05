@@ -3,6 +3,7 @@
 namespace Faithgen\Discussions\Jobs;
 
 use Faithgen\Discussions\Models\Discussion;
+use FaithGen\SDK\Traits\ProcessesImages;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,7 +13,11 @@ use Intervention\Image\ImageManager;
 
 class ProcessImages implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        ProcessesImages;
 
     public bool $deleteWhenMissingModels = true;
     /**
@@ -23,7 +28,7 @@ class ProcessImages implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  Discussion  $discussion
+     * @param Discussion $discussion
      */
     public function __construct(Discussion $discussion)
     {
@@ -33,23 +38,12 @@ class ProcessImages implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  ImageManager  $imageManager
+     * @param ImageManager $imageManager
      *
      * @return void
      */
     public function handle(ImageManager $imageManager)
     {
-        foreach ($this->discussion->images as $image) {
-            try {
-                $ogImage = storage_path('app/public/discussions/original/').$image->name;
-                $thumb100 = storage_path('app/public/discussions/100-100/').$image->name;
-
-                $imageManager->make($ogImage)->fit(100, 100, function ($constraint) {
-                    $constraint->upsize();
-                    $constraint->aspectRatio();
-                }, 'center')->save($thumb100);
-            } catch (\Exception $e) {
-            }
-        }
+        $this->processImage($imageManager, $this->discussion);
     }
 }

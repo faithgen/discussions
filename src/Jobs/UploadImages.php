@@ -3,6 +3,7 @@
 namespace Faithgen\Discussions\Jobs;
 
 use Faithgen\Discussions\Models\Discussion;
+use FaithGen\SDK\Traits\UploadsImages;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -12,7 +13,11 @@ use Intervention\Image\ImageManager;
 
 class UploadImages implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable,
+        InteractsWithQueue,
+        Queueable,
+        SerializesModels,
+        UploadsImages;
 
     public bool $deleteWhenMissingModels = true;
     /**
@@ -27,8 +32,8 @@ class UploadImages implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param  Discussion  $discussion
-     * @param  array  $images
+     * @param Discussion $discussion
+     * @param array $images
      */
     public function __construct(Discussion $discussion, array $images)
     {
@@ -39,23 +44,12 @@ class UploadImages implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param  ImageManager  $imageManager
+     * @param ImageManager $imageManager
      *
      * @return void
      */
     public function handle(ImageManager $imageManager)
     {
-        foreach ($this->images as $imageData) {
-            $fileName = str_shuffle($this->discussion->id.time().time()).'.png';
-            $ogSave = storage_path('app/public/discussions/original/').$fileName;
-            try {
-                $imageManager->make($imageData)->save($ogSave);
-                $this->discussion->images()->create([
-                    'imageable_id' => $this->discussion->id,
-                    'name'         => $fileName,
-                ]);
-            } catch (\Exception $e) {
-            }
-        }
+        $this->uploadImages($this->discussion, $this->images, $imageManager);
     }
 }
