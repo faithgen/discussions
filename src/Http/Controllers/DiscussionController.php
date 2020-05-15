@@ -35,7 +35,7 @@ class DiscussionController extends Controller
     /**
      * DiscussionController constructor.
      *
-     * @param  DiscussionService  $discussionService
+     * @param DiscussionService $discussionService
      */
     public function __construct(DiscussionService $discussionService)
     {
@@ -45,7 +45,7 @@ class DiscussionController extends Controller
     /**
      * Fetches the discussions.
      *
-     * @param  IndexRequest  $request
+     * @param IndexRequest $request
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
@@ -60,9 +60,11 @@ class DiscussionController extends Controller
             ->with(['discussable.image'])
             ->exclude(['discussion'])
             ->withCount('comments')
-            ->search(['url'], $request->filter_text)
-            ->orWhereHasMorph('discussable', $acceptableTypes,
-                fn ($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'))
+            ->where(function ($query) use ($request, $acceptableTypes) {
+                return $query->search(['url'], $request->filter_text)
+                    ->orWhereHasMorph('discussable', $acceptableTypes,
+                        fn ($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'));
+            })
             ->paginate(Helper::getLimit($request));
 
         DiscussionList::wrap('discussions');
@@ -73,7 +75,7 @@ class DiscussionController extends Controller
     /**
      * Creates a discussion.
      *
-     * @param  CreateRequest  $request
+     * @param CreateRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -90,8 +92,8 @@ class DiscussionController extends Controller
     /**
      * Deletes the discussion.
      *
-     * @param  Discussion  $discussion
-     * @param  DeleteRequest  $request
+     * @param Discussion $discussion
+     * @param DeleteRequest $request
      *
      * @return mixed
      */
@@ -109,7 +111,7 @@ class DiscussionController extends Controller
     /**
      * Updates the discussion.
      *
-     * @param  UpdateRequest  $request
+     * @param UpdateRequest $request
      *
      * @return \Illuminate\Http\JsonResponse|mixed
      */
@@ -121,10 +123,10 @@ class DiscussionController extends Controller
     /**
      * Shows the discussion in detail.
      *
-     * @param  Discussion  $discussion
+     * @param Discussion $discussion
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      * @return DiscussionResource
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function show(Discussion $discussion)
     {
@@ -143,11 +145,11 @@ class DiscussionController extends Controller
     /**
      * Fetch discussion comments.
      *
-     * @param  Request  $request
-     * @param  Discussion  $discussion
+     * @param Request $request
+     * @param Discussion $discussion
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function comments(Request $request, Discussion $discussion)
     {
@@ -159,7 +161,7 @@ class DiscussionController extends Controller
     /**
      * Creates a comment for a discussion.
      *
-     * @param  CommentRequest  $request
+     * @param CommentRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -171,12 +173,12 @@ class DiscussionController extends Controller
     /**
      * Deletes an image from a discussion.
      *
-     * @param  DeleteImageRequest  $request
-     * @param  Discussion  $discussion
-     * @param  Image  $image
+     * @param DeleteImageRequest $request
+     * @param Discussion $discussion
+     * @param Image $image
      *
-     * @throws \Exception
      * @return mixed
+     * @throws \Exception
      */
     public function deleteImage(DeleteImageRequest $request, Discussion $discussion, Image $image)
     {
@@ -195,10 +197,10 @@ class DiscussionController extends Controller
     /**
      * Changes the discussion status.
      *
-     * @param  Discussion  $discussion
+     * @param Discussion $discussion
      *
-     * @throws \Illuminate\Auth\Access\AuthorizationException
      * @return mixed
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
     public function toggleStatus(Discussion $discussion)
     {
@@ -213,8 +215,8 @@ class DiscussionController extends Controller
     /**
      * Get the discussions raised by a user.
      *
-     * @param  User  $user
-     * @param  IndexRequest  $request
+     * @param User $user
+     * @param IndexRequest $request
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
