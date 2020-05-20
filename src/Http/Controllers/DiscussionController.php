@@ -229,6 +229,12 @@ class DiscussionController extends Controller
             ->withCount('comments')
             ->search(['url'], $request->filter_text)
             ->where('ministry_id', auth()->user()->id)
+            ->where(function ($query) use ($user) {
+                if (auth('web')->user() && $user->id !== auth('web')->user()->id) {
+                    return $query->approved();
+                }
+                return $query;
+            })
             ->paginate(Helper::getLimit($request));
 
         DiscussionList::wrap('discussions');
