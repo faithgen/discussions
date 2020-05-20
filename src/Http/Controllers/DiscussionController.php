@@ -215,13 +215,16 @@ class DiscussionController extends Controller
     /**
      * Get the discussions raised by a user.
      *
-     * @param User $user
+     * @param $user_id
      * @param IndexRequest $request
      *
      * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
      */
-    public function userDiscussions(User $user, IndexRequest $request)
+    public function userDiscussions($user_id, IndexRequest $request)
     {
+        $userModel = config('auth.providers.users.model');
+        $user = $userModel::findOrFail($user_id);
+
         $discussions = $user->discussions()
             ->latest()
             ->with(['discussable.image'])
@@ -233,6 +236,7 @@ class DiscussionController extends Controller
                 if (auth('web')->user() && $user->id !== auth('web')->user()->id) {
                     return $query->approved();
                 }
+
                 return $query;
             })
             ->paginate(Helper::getLimit($request));
