@@ -204,7 +204,7 @@ class DiscussionController extends Controller
      */
     public function toggleStatus(Discussion $discussion)
     {
-        $this->authorize('edit', $discussion);
+        $this->authorize('update', $discussion);
 
         $discussion->approved = ! $discussion->approved;
         $discussion->save();
