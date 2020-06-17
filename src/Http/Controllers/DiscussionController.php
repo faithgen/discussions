@@ -2,7 +2,6 @@
 
 namespace Faithgen\Discussions\Http\Controllers;
 
-use Faithgen\Discussions\Http\Requests\CommentRequest;
 use Faithgen\Discussions\Http\Requests\CreateRequest;
 use Faithgen\Discussions\Http\Requests\DeleteImageRequest;
 use Faithgen\Discussions\Http\Requests\DeleteRequest;
@@ -12,6 +11,7 @@ use Faithgen\Discussions\Http\Resources\DiscussionList;
 use Faithgen\Discussions\Models\Discussion;
 use Faithgen\Discussions\Services\DiscussionService;
 use FaithGen\SDK\Helpers\CommentHelper;
+use FaithGen\SDK\Http\Requests\CommentRequest;
 use FaithGen\SDK\Models\Image;
 use FaithGen\SDK\Models\Ministry;
 use FaithGen\SDK\Models\User;
