@@ -4,7 +4,6 @@ namespace Faithgen\Discussions\Http\Requests;
 
 use Faithgen\Discussions\Services\DiscussionService;
 use Faithgen\Discussions\Traits\SavesDiscussion;
-use FaithGen\SDK\Helpers\Helper;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateRequest extends FormRequest
@@ -35,8 +34,7 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return array_merge([
-            'discussion_id' => Helper::$idValidation,
-            'title'         => 'required|string',
+            'title' => 'required|string',
         ], $this->getSaveRules());
     }
 }

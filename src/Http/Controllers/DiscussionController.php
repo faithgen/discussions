@@ -64,8 +64,7 @@ class DiscussionController extends Controller
                 return $query->search(['url'], $request->filter_text)
                     ->orWhereHasMorph('discussable', $acceptableTypes,
                         fn ($discussable) => $discussable->where('name', 'LIKE', '%'.$request->filter_text.'%'));
-            })
-            ->paginate(Helper::getLimit($request));
+            })->paginate(Helper::getLimit($request));
 
         DiscussionList::wrap('discussions');
 
@@ -238,8 +237,7 @@ class DiscussionController extends Controller
                 }
 
                 return $query;
-            })
-            ->paginate(Helper::getLimit($request));
+            })->paginate(Helper::getLimit($request));
 
         DiscussionList::wrap('discussions');
 
