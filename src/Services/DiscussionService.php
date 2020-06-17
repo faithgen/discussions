@@ -7,19 +7,25 @@ use InnoFlash\LaraStart\Services\CRUDServices;
 
 class DiscussionService extends CRUDServices
 {
-    private Discussion $discussion;
+    protected Discussion $discussion;
 
-    public function __construct(Discussion $discussion)
+    public function __construct()
     {
+        $this->discussion = new Discussion();
+
         if (request()->has('discussion_id')) {
             $this->discussion = Discussion::findOrFail(request('discussion_id'));
-        } else {
-            $this->discussion = $discussion;
+        }
+
+        if (request()->route('discussion')) {
+            $this->discussion = request()->route('discussion');
         }
     }
 
     /**
      * Retrieves an instance of discussion.
+     *
+     * @return \Faithgen\Discussions\Models\Discussion
      */
     public function getDiscussion(): Discussion
     {
@@ -29,20 +35,13 @@ class DiscussionService extends CRUDServices
     /**
      * Makes a list of fields that you do not want to be sent
      * to the create or update methods.
-     * Its mainly the fields that you do not have in the discussions table.
+     * Its mainly the fields that you do not have in the messages table.
+     *
+     * @return array
      */
-    public function getUnsetFields()
+    public function getUnsetFields(): array
     {
-        return ['discussion_id', 'images'];
-    }
-
-    /**
-     * This returns the model found in the constructor.
-     * or an instance of the class if no discussion is found.
-     */
-    public function getModel()
-    {
-        return $this->getDiscussion();
+        return ['discussion_id'];
     }
 
     /**
