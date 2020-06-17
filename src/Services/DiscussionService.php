@@ -17,8 +17,8 @@ class DiscussionService extends CRUDServices
             $this->discussion = Discussion::findOrFail(request('discussion_id'));
         }
 
-        if (request()->route('discussion')) {
-            $this->discussion = request()->route('discussion');
+        if (request()->route()->hasParameter('discussion')) {
+            $this->discussion = app(Discussion::class)->resolveRouteBinding(request()->route('discussion'));
         }
     }
 
